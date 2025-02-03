@@ -1,65 +1,29 @@
 import fs from 'fs'
-import { useEffect, useState } from 'react'
-
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import Image from 'next/image'
-import Link from 'next/link'
-
 import { NextSeo } from 'next-seo'
 import { generateRss } from '~/lib/rss'
-import { getSortedPosts, getAllCategories } from '~/lib/posts'
-import authors from 'lib/authors.json'
+import { getSortedPosts } from '~/lib/posts'
 
+import type PostTypes from '~/types/post'
 import DefaultLayout from '~/components/Layouts/Default'
-import { Tabs } from 'ui'
-import PostTypes from '~/types/post'
+import BlogGridItem from '~/components/Blog/BlogGridItem'
 import BlogListItem from '~/components/Blog/BlogListItem'
+import BlogFilters from '~/components/Blog/BlogFilters'
+import FeaturedThumb from '~/components/Blog/FeaturedThumb'
+import { cn } from 'ui'
+import { LOCAL_STORAGE_KEYS, isBrowser } from 'common'
 
-export async function getStaticProps() {
-  const allPostsData = getSortedPosts('_blog', undefined, undefined, '** BLOG PAGE **')
-  const categories = getAllCategories('_blog')
-  const rss = generateRss(allPostsData)
-
-  // create a rss feed in public directory
-  // rss feed is added via <Head> component in render return
-  fs.writeFileSync('./public/rss.xml', rss)
-
-  return {
-    props: {
-      blogs: allPostsData,
-      categories,
-    },
-  }
-}
+export type BlogView = 'list' | 'grid'
 
 function Blog(props: any) {
-  const [category, setCategory] = useState('all')
+  const { BLOG_VIEW } = LOCAL_STORAGE_KEYS
+  const localView = isBrowser ? (localStorage?.getItem(BLOG_VIEW) as BlogView) : undefined
   const [blogs, setBlogs] = useState(props.blogs)
-
+  const [view, setView] = useState<BlogView>(localView ?? 'list')
+  const isList = view === 'list'
   const router = useRouter()
 
-  useEffect(() => {
-    // construct an array of blog posts
-    // not inluding the first blog post
-    const shiftedBlogs = [...props.blogs]
-    shiftedBlogs.shift()
-
-    setBlogs(
-      category === 'all'
-        ? shiftedBlogs
-        : props.blogs.filter((post: any) => {
-            const found = post.tags.includes(category)
-            return found
-          })
-    )
-  }, [category])
-
-  useEffect(() => {
-    return props.categories.unshift('all')
-  }, [])
-
-  // append 'all' category
-  // const categories = props.categories.push('all')
   const meta_title = 'Supabase Blog: Open Source Firebase alternative Blog'
   const meta_description = 'Get all your Supabase News on the Supabase blog.'
 
@@ -74,7 +38,7 @@ function Blog(props: any) {
           url: `https://supabase.com/${router.pathname}`,
           images: [
             {
-              url: `https://supabase.com/images/og/og-image.jpg`,
+              url: `https://supabase.com/images/og/supabase-og.png`,
             },
           ],
         }}
@@ -87,113 +51,80 @@ function Blog(props: any) {
         ]}
       />
       <DefaultLayout>
-        <div className="overflow-hidden py-12">
-          <div className="container mx-auto mt-16 px-8 sm:px-16 xl:px-20">
-            <div className="mx-auto ">
-              {props.blogs.slice(0, 1).map((blog: any, i: number) => (
-                <FeaturedThumb key={i} {...blog} />
-              ))}
-            </div>
-          </div>
+        <h1 className="sr-only">Supabase blog</h1>
+        <div className="md:container mx-auto py-4 lg:py-10 px-4 sm:px-12 xl:px-16">
+          {props.blogs.slice(0, 1).map((blog: any, i: number) => (
+            <FeaturedThumb key={i} {...blog} />
+          ))}
         </div>
 
-        <div className="border-scale-600 border-t">
-          <div className="container mx-auto mt-16 px-8 sm:px-16 xl:px-20">
-            <div className="mx-auto ">
-              <div className="grid grid-cols-12">
-                <div className="col-span-12 lg:col-span-12">
-                  <Tabs scrollable size="medium" onChange={setCategory} defaultActiveId={'all'}>
-                    {props.categories.map((categoryId: string) => (
-                      <Tabs.Panel id={categoryId} key={categoryId} label={categoryId} />
-                    ))}
-                  </Tabs>
-                </div>
-              </div>
-            </div>
+        <div className="border-default border-t">
+          <div className="md:container mx-auto mt-6 lg:mt-8 px-6 sm:px-16 xl:px-20">
+            <BlogFilters
+              allPosts={props.blogs}
+              setPosts={setBlogs}
+              view={view as BlogView}
+              setView={setView}
+            />
 
-            <ol className="grid grid-cols-12 py-16 lg:gap-16">
-              {blogs.map((blog: PostTypes, idx: number) => (
-                <div
-                  className="col-span-12 mb-16 md:col-span-12 lg:col-span-6 xl:col-span-4"
-                  key={idx}
-                >
-                  <BlogListItem post={blog} />
-                </div>
-              ))}
+            <ol
+              className={cn(
+                'grid -mx-2 sm:-mx-4 py-6 lg:py-6 lg:pb-20',
+                isList ? 'grid-cols-1' : 'grid-cols-12 lg:gap-4'
+              )}
+            >
+              {blogs?.length ? (
+                blogs?.map((blog: PostTypes, idx: number) =>
+                  isList ? (
+                    <div className="col-span-12 px-2 sm:px-4 [&_a]:last:border-none" key={idx}>
+                      <BlogListItem post={blog} />
+                    </div>
+                  ) : (
+                    <div
+                      className="col-span-12 mb-4 md:col-span-12 lg:col-span-6 xl:col-span-4 h-full"
+                      key={idx}
+                    >
+                      <BlogGridItem post={blog} />
+                    </div>
+                  )
+                )
+              ) : (
+                <p className="text-sm text-light col-span-full">No results</p>
+              )}
             </ol>
-          </div>{' '}
+          </div>
         </div>
       </DefaultLayout>
     </>
   )
 }
 
-function FeaturedThumb(blog: PostTypes) {
-  // @ts-ignore
-  const authorArray = blog.author.split(',')
+export async function getStaticProps() {
+  const allPostsData = getSortedPosts({ directory: '_blog', runner: '** BLOG PAGE **' })
+  const rss = generateRss(allPostsData)
 
-  const author = []
-  for (let i = 0; i < authorArray.length; i++) {
-    // @ts-ignore
-    author.push(
-      authors.find((authors: any) => {
-        // @ts-ignore
-        return authors.author_id === authorArray[i]
-      })
-    )
+  // create a rss feed in public directory
+  // rss feed is added via <Head> component in render return
+  fs.writeFileSync('./public/rss.xml', rss)
+
+  // generate a series of rss feeds for each author (for PlanetPG)
+  const planetPgPosts = allPostsData.filter((post: any) => post.tags?.includes('planetpg'))
+  const planetPgAuthors = planetPgPosts.map((post: any) => post.author.split(','))
+  const uniquePlanetPgAuthors = new Set([].concat(...planetPgAuthors))
+
+  uniquePlanetPgAuthors.forEach((author) => {
+    const authorPosts = planetPgPosts.filter((post: any) => post.author.includes(author))
+    if (authorPosts.length > 0) {
+      const authorRss = generateRss(authorPosts, author)
+      fs.writeFileSync(`./public/planetpg-${author}-rss.xml`, authorRss)
+    }
+  })
+
+  return {
+    props: {
+      blogs: allPostsData,
+    },
   }
-
-  return (
-    <div key={blog.slug} className="w-full cursor-pointer">
-      <Link href={`${blog.path}`}>
-        <a className="grid gap-8 lg:grid-cols-2 lg:gap-16">
-          <div className="relative h-96 w-full overflow-auto rounded-lg border">
-            <Image
-              src={`/images/blog/` + (blog.thumb ? blog.thumb : blog.image)}
-              layout="fill"
-              objectFit="cover"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="text-scale-900 flex space-x-2 text-sm">
-              <p>{blog.date}</p>
-              <p>•</p>
-              <p>{blog.readingTime}</p>
-            </div>
-
-            <div>
-              <h2 className="h2">{blog.title}</h2>
-              <p className="p text-xl">{blog.description}</p>
-            </div>
-
-            <div className="grid w-max grid-flow-col grid-rows-4 gap-4">
-              {author.map((author: any, i: number) => {
-                return (
-                  <div className="flex items-center space-x-3" key={i}>
-                    {author.author_image_url && (
-                      <div className="relative h-10 w-10 overflow-auto">
-                        <Image
-                          src={author.author_image_url}
-                          alt={`${author.author} avatar`}
-                          className="rounded-full"
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
-                    )}
-                    <div className="flex flex-col">
-                      <span className="text-scale-1200 m-0 text-sm">{author.author}</span>
-                      <span className="text-scale-900 m-0 text-xs">{author.position}</span>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </a>
-      </Link>
-    </div>
-  )
 }
 
 export default Blog

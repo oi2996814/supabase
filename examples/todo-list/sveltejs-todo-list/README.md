@@ -4,11 +4,11 @@
   - Svelte, TypeScript
   - [Supabase.js](https://supabase.com/docs/library/getting-started) for user management and realtime data syncing.
 - Backend:
-  - [app.supabase.com](https://app.supabase.com/): hosted Postgres database with restful API for usage with Supabase.js.
+  - [supabase.com/dashboard](https://supabase.com/dashboard/): hosted Postgres database with restful API for usage with Supabase.js.
 
 ### 1. Create new project
 
-Sign up to Supabase - [https://app.supabase.com](https://app.supabase.com) and create a new project. Wait for your database to start.
+Sign up to Supabase - [https://supabase.com/dashboard](https://supabase.com/dashboard) and create a new project. Wait for your database to start.
 
 ### 2. Run "Todo List" Quickstart
 
@@ -28,7 +28,7 @@ The `anon` key is your client-side API key. It allows "anonymous access" to your
 
 ### Postgres Row level security
 
-This project uses very high-level Authorization using Postgres' Role Level Security.
+This project uses very high-level Authorization using Postgres' Row Level Security.
 When you start a Postgres database on Supabase, we populate it with an `auth` schema, and some helper functions.
 When a user logs in, they are issued a JWT with the role `authenticated` and their UUID.
 We can use these details to provide fine-grained control over what each user can and cannot do.
@@ -47,16 +47,16 @@ create table todos (
 alter table todos enable row level security;
 
 create policy "Individuals can create todos." on todos for
-    insert with check (auth.uid() = user_id);
+    insert with check ((select auth.uid()) = user_id);
 
 create policy "Individuals can view their own todos. " on todos for
-    select using (auth.uid() = user_id);
+    select using ((select auth.uid()) = user_id);
 
 create policy "Individuals can update their own todos." on todos for
-    update using (auth.uid() = user_id);
+    update using ((select auth.uid()) = user_id);
 
 create policy "Individuals can delete their own todos." on todos for
-    delete using (auth.uid() = user_id);
+    delete using ((select auth.uid()) = user_id);
 ```
 
 ## Authors

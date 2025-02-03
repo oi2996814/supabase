@@ -1,19 +1,14 @@
+'use client'
+
 import React, { useState } from 'react'
-import { IconAlertTriangle } from '../Icon/icons/IconAlertTriangle'
 
-import { IconInfo } from '../Icon/icons/IconInfo'
-import { IconX } from '../Icon/icons/IconX'
-
-// @ts-ignore
-// import AlertStyles from './Alert.module.css'
 import styleHandler from '../../lib/theme/styleHandler'
-import { IconAlertOctagon } from '../Icon/icons/IconAlertOctagon'
-import { IconCheckCircle } from '../Icon/icons/IconCheckCircle'
+import { AlertOctagon, CheckCircle, AlertTriangle, Info, X } from 'lucide-react'
 
-interface Props {
-  variant?: 'success' | 'danger' | 'warning' | 'info' | 'neutral'
+export interface AlertProps {
+  variant?: AlertVariant
   className?: string
-  title: string
+  title: string | React.ReactNode
   withIcon?: boolean
   closable?: boolean
   children?: React.ReactNode
@@ -21,18 +16,20 @@ interface Props {
   actions?: React.ReactNode
 }
 
-const icons: Record<
-  'success' | 'danger' | 'warning' | 'info' | 'neutral',
-  React.ReactElement
-> = {
-  danger: <IconAlertOctagon strokeWidth={1.5} size={18} />,
-  success: <IconCheckCircle strokeWidth={1.5} size={18} />,
-  warning: <IconAlertTriangle strokeWidth={1.5} size={18} />,
-  info: <IconInfo strokeWidth={1.5} size={18} />,
+export type AlertVariant = 'success' | 'danger' | 'warning' | 'info' | 'neutral'
+
+const icons: Record<AlertVariant, React.ReactElement> = {
+  danger: <AlertOctagon strokeWidth={1.5} size={18} />,
+  success: <CheckCircle strokeWidth={1.5} size={18} />,
+  warning: <AlertTriangle strokeWidth={1.5} size={18} />,
+  info: <Info strokeWidth={1.5} size={18} />,
   neutral: <></>,
 }
 
-function Alert({
+/**
+ * @deprecated Use Alert_Shadcn_. For studio use Admonition
+ */
+export function Alert({
   variant = 'neutral',
   className,
   title,
@@ -41,7 +38,7 @@ function Alert({
   children,
   icon,
   actions,
-}: Props) {
+}: AlertProps) {
   let __styles = styleHandler('alert')
 
   const [visible, setVisible] = useState(true)
@@ -51,10 +48,7 @@ function Alert({
 
   if (className) containerClasses.push(className)
 
-  let descriptionClasses = [
-    __styles.description,
-    __styles.variant[variant].description,
-  ]
+  let descriptionClasses = [__styles.description, __styles.variant[variant].description]
   let closeButtonClasses = [__styles.close]
 
   return (
@@ -62,19 +56,12 @@ function Alert({
       {visible && (
         <div className={containerClasses.join(' ')}>
           {withIcon ? (
-            <div className={__styles.variant[variant].icon}>
-              {withIcon && icons[variant]}
-            </div>
+            <div className={__styles.variant[variant].icon}>{withIcon && icons[variant]}</div>
           ) : null}
           {icon && icon}
           <div className="flex flex-1 items-center justify-between">
             <div>
-              <h3
-                className={[
-                  __styles.variant[variant].header,
-                  __styles.header,
-                ].join(' ')}
-              >
+              <h3 className={[__styles.variant[variant].header, __styles.header].join(' ')}>
                 {title}
               </h3>
               <div className={descriptionClasses.join(' ')}>{children}</div>
@@ -87,7 +74,7 @@ function Alert({
               onClick={() => setVisible(false)}
               className={closeButtonClasses.join(' ')}
             >
-              <IconX strokeWidth={2} size={16} />
+              <X strokeWidth={2} size={16} />
             </button>
           )}
         </div>
@@ -95,5 +82,3 @@ function Alert({
     </>
   )
 }
-
-export default Alert

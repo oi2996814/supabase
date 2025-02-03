@@ -4,9 +4,10 @@
     "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./*"],
+      "@ui/*": ["./../../packages/ui/src/*"]
     },
-    "target": "es5",
+    "target": "ES2021",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,8 +19,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "module": "esnext"
+    "module": "esnext",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/guides/append-test.js"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/guides/append-test.js",
+    ".next/types/**/*.ts",
+    "./../../packages/ui/src/**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "examples"]
 }

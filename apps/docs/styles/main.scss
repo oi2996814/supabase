@@ -2,46 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './../../../packages/ui/build/css/source/global.css';
+@import './../../../packages/ui/build/css/themes/dark-combined.css';
+@import './../../../packages/ui/build/css/themes/light.css';
+
 @font-face {
   font-family: 'custom-font';
-  src: url(../../../packages/common/assets/fonts/CustomFont-Book.woff2) format('woff2'),
+  src:
+    url(../../../packages/common/assets/fonts/CustomFont-Book.woff2) format('woff2'),
     url(../../../packages/common/assets/fonts/CustomFont-Book.woff) format('woff');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'custom-font';
-  src: url(../../../packages/common/assets/fonts/CustomFont-Medium.woff2) format('woff2'),
+  src:
+    url(../../../packages/common/assets/fonts/CustomFont-Medium.woff2) format('woff2'),
     url(../../../packages/common/assets/fonts/CustomFont-Medium.woff) format('woff');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
   --sidebar-width: 300px;
+  --header-height: 50px;
 }
 
 body {
-  @apply bg-white dark:bg-[#1c1c1c] #{!important};
+  @apply bg-background text-foreground;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background-color: #6ee7b7;
+  background-color: #6ee7b7 !important;
   color: #333 !important;
 }
 
-a {
-  text-decoration: none !important;
-}
+// a {
+//   text-decoration: none !important;
+// }
 
 article h1 {
-  margin-bottom: 2rem !important;
-  font-size: 3rem !important;
-  font-weight: 400 !important;
+  // margin-bottom: 2rem !important;
+  // font-size: 3rem !important;
+  // font-weight: 400 !important;
 }
 
 .thin-scrollbar {
@@ -60,22 +69,21 @@ article h1 {
   }
 }
 
-.table-of-contents-height {
-  max-height: calc(100vh - 3.75rem - 2rem);
-  top: calc(3.75rem + 1rem);
-}
-
 .width-full {
   width: 100% !important;
 }
 
 .p:not(.prose *):not(.overwrite) {
-  @apply text-scale-1100;
+  @apply text-foreground-light;
   margin-bottom: 16px;
 }
 
 .small:not(.prose *):not(.overwrite) {
-  @apply text-scale-900 text-xs;
+  @apply text-foreground-muted text-xs;
+}
+
+.prose :where(p):not(:where([class~='not-prose'] *)) {
+  white-space: pre-line;
 }
 
 code[class*='language-'],
@@ -115,7 +123,7 @@ pre[class*='language-'] {
 
 .method-list-item-validation {
   code {
-    @apply text-xs bg-scale-300 rounded;
+    @apply text-xs bg-control rounded;
     padding: 1px 6px;
   }
 }
@@ -125,7 +133,7 @@ pre[class*='language-'] {
 }
 
 .method-list-group .method-list-group {
-  @apply border border-scale-400 rounded-md;
+  @apply border border-overlay rounded-md;
   margin-bottom: 20px;
   max-width: 600px;
 }
@@ -159,7 +167,7 @@ pre[class*='language-'] {
 
 // ToC styles
 .toc__menu-item--active {
-  color: var(--colors-brand9) !important;
+  color: hsl(var(--brand-default)) !important;
 }
 
 .video-container {
@@ -199,7 +207,7 @@ h4 code {
 
 // code inside admonitions
 .admonition-content p code {
-  @apply bg-scale-300;
+  @apply bg-control;
   word-break: keep-all !important;
   white-space: nowrap !important;
 }
@@ -223,6 +231,7 @@ article p code {
 }
 
 .short-inline-codeblock {
+  word-wrap: break-word;
   @media screen and (min-width: 769px) {
     white-space: pre !important;
   }
@@ -237,4 +246,106 @@ article p code {
 .toc-menu li a code {
   background: none;
   border: none;
+}
+
+/*
+* sets the image in @Next/Image components
+* to respect the height of the content
+*
+*/
+.next-image--dynamic-fill {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+.next-image--dynamic-fill > span {
+  position: relative !important;
+}
+.next-image--dynamic-fill img {
+  object-fit: contain;
+  width: 100% !important;
+  position: relative !important;
+  height: unset !important;
+}
+
+#docs-content-container #introduction {
+  @apply scroll-mt-60;
+}
+
+/* dat.GUI */
+
+.dg.ac {
+  z-index: 9999 !important;
+}
+
+/* tables */
+
+th code {
+  @apply text-nowrap;
+}
+
+/* 
+ * Prevents very long code lines (checksums, URLs, etc., from breaking table
+ * widths
+ */
+.prose :where(td) code {
+  @apply break-all;
+}
+
+/* Zoomable image */
+
+[data-rmiz-modal]:focus,
+[data-rmiz-modal-overlay]:focus {
+  outline: none !important;
+}
+
+[data-rmiz-modal-overlay],
+[data-rmiz-modal-img] {
+  transition-timing-function: cubic-bezier(0.24, 0.25, 0.05, 1) !important;
+}
+[data-rmiz-modal-overlay='visible'] {
+  background-color: hsl(var(--background-default)) !important;
+  opacity: 0.8;
+}
+[data-rmiz-modal-img] {
+  image-rendering: high-quality;
+}
+
+/* Loaders */
+
+.shimmering-loader {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    hsl(var(--border-default)) 4%,
+    hsl(var(--background-surface-200)) 25%,
+    hsl(var(--border-default)) 36%
+  );
+  background-size: 1000px 100%;
+}
+
+.dark .shimmering-loader {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    hsl(var(--border-default)) 4%,
+    hsl(var(--border-control)) 25%,
+    hsl(var(--border-default)) 36%
+  );
+  background-size: 1000px 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skip-link {
+  @apply sr-only;
+}
+.skip-link:focus {
+  @apply not-sr-only;
 }

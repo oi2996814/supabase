@@ -2,70 +2,70 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { serve } from "https://deno.land/std@0.131.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.0.0'
+import { createClient, SupabaseClient } from 'jsr:@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE',
 }
 
 interface Task {
-  name: string;
-  status: number;
+  name: string
+  status: number
 }
 
-async function getTask(supabaseClient: any, id: string) {
-  const { data: task, error } = await supabaseClient.from('tasks').select('*').eq('id', id);
+async function getTask(supabaseClient: SupabaseClient, id: string) {
+  const { data: task, error } = await supabaseClient.from('tasks').select('*').eq('id', id)
   if (error) throw error
 
   return new Response(JSON.stringify({ task }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     status: 200,
-  });
+  })
 }
 
-async function getAllTasks(supabaseClient: any) {
+async function getAllTasks(supabaseClient: SupabaseClient) {
   const { data: tasks, error } = await supabaseClient.from('tasks').select('*')
   if (error) throw error
 
   return new Response(JSON.stringify({ tasks }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     status: 200,
-  });
+  })
 }
 
-async function deleteTask(supabaseClient: any, id: string) {
-  const { error } = await supabaseClient.from('tasks').delete().eq('id', id);
+async function deleteTask(supabaseClient: SupabaseClient, id: string) {
+  const { error } = await supabaseClient.from('tasks').delete().eq('id', id)
   if (error) throw error
 
   return new Response(JSON.stringify({}), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     status: 200,
-  });
+  })
 }
 
-async function updateTask(supabaseClient: any, id: string, task: Task) {
-  const { error } = await supabaseClient.from('tasks').update(task).eq('id', id);
+async function updateTask(supabaseClient: SupabaseClient, id: string, task: Task) {
+  const { error } = await supabaseClient.from('tasks').update(task).eq('id', id)
   if (error) throw error
 
   return new Response(JSON.stringify({ task }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     status: 200,
-  });
+  })
 }
 
-async function createTask(supabaseClient: any, task: Task) {
-  const { error } = await supabaseClient.from('tasks').insert(task);
+async function createTask(supabaseClient: SupabaseClient, task: Task) {
+  const { error } = await supabaseClient.from('tasks').insert(task)
   if (error) throw error
 
   return new Response(JSON.stringify({ task }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     status: 200,
-  });
+  })
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   const { url, method } = req
 
   // This is needed if you're planning to invoke your function from a browser.
@@ -82,7 +82,11 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       // Create client with Auth context of the user that called the function.
       // This way your row-level-security (RLS) policies are applied.
-      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+      {
+        global: {
+          headers: { Authorization: req.headers.get('Authorization')! },
+        },
+      }
     )
 
     // For more details on URLPattern, check https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API
@@ -90,10 +94,10 @@ serve(async (req) => {
     const matchingPath = taskPattern.exec(url)
     const id = matchingPath ? matchingPath.pathname.groups.id : null
 
-    let task = null;
-    if (method === "POST" || method === "PUT") {
-        const body = await req.json();
-        task = body.task;
+    let task = null
+    if (method === 'POST' || method === 'PUT') {
+      const body = await req.json()
+      task = body.task
     }
 
     // call relevant method based on method and id
@@ -112,7 +116,7 @@ serve(async (req) => {
         return getAllTasks(supabaseClient)
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
 
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

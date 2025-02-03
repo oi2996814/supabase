@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { FormLayout } from '../../lib/Layout/FormLayout'
-import { CheckboxContext } from './CheckboxContext'
-// @ts-ignore
-import CheckboxStyles from './Checkbox.module.css'
+'use client'
 
-import defaultTheme from '../../lib/theme/defaultTheme'
+import React from 'react'
 
-import { useFormContext } from '../Form/FormContext'
+import { FormLayout } from '../../lib/Layout/FormLayout/FormLayout'
 import styleHandler from '../../lib/theme/styleHandler'
+import { useFormContext } from '../Form/FormContext'
+import CheckboxStyles from './Checkbox.module.css'
+import { CheckboxContext } from './CheckboxContext'
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   afterLabel?: string
@@ -36,6 +35,9 @@ interface GroupProps {
   size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge'
 }
 
+/**
+ * @deprecated Use ./Checkbox_shadcn_ instead
+ */
 function Group({
   id,
   layout = 'vertical',
@@ -77,6 +79,7 @@ function Group({
                 return (
                   <Checkbox
                     id={option.id}
+                    key={option.id}
                     value={option.value}
                     label={option.label}
                     beforeLabel={option.beforeLabel}
@@ -84,6 +87,7 @@ function Group({
                     checked={option.checked}
                     name={option.name}
                     description={option.description}
+                    defaultChecked={option.defaultChecked}
                   />
                 )
               })
@@ -94,6 +98,9 @@ function Group({
   )
 }
 
+/**
+ * @deprecated Use ./Checkbox_shadcn_ instead
+ */
 export function Checkbox({
   className,
   id = '',
@@ -121,13 +128,13 @@ export function Checkbox({
         const markupId = id
           ? id
           : name
-          ? name
-          : label
-          ? label
-              .toLowerCase()
-              .replace(/^[^A-Z0-9]+/gi, '')
-              .replace(/ /g, '-')
-          : undefined
+            ? name
+            : label
+              ? label
+                  .toLowerCase()
+                  .replace(/^[^A-Z0-9]+/gi, '')
+                  .replace(/ /g, '-')
+              : undefined
 
         // @ts-ignore
         size = parentSize ? parentSize : size
@@ -158,7 +165,11 @@ export function Checkbox({
         if (values && checked === undefined) active = values[id || name]
 
         function handleBlurEvent(e: React.FocusEvent<HTMLInputElement>) {
-          if (handleBlur) handleBlur(e)
+          if (handleBlur) {
+            setTimeout(() => {
+              handleBlur(e)
+            }, 100)
+          }
           if (onBlur) onBlur(e)
         }
 

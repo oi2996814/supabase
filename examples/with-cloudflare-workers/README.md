@@ -17,7 +17,7 @@ In order to send a JSON response, we first stringify the object we get back from
 **Install Supabase JS**
 
 ```bash
-npm i @supabase-supabase-js
+npm i @supabase/supabase-js
 ```
 
 **Create a Cloudflare secret**
@@ -68,7 +68,7 @@ return new Response(JSON.stringify(data), {
 
 ---
 
-[👉 Next lesson](/04-proxy-supabase-requests-with-cloudflare-workers-and-itty-router)
+[👉 Next lesson](https://github.com/dijonmusters/supabase-data-at-the-edge/tree/main/04-proxy-supabase-requests-with-cloudflare-workers-and-itty-router)
 
 ---
 

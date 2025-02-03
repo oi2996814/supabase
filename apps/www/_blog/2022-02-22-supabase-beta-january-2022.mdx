@@ -4,13 +4,15 @@ description: New auth providers, SMS providers, and new videos.
 author: paul_copplestone
 author_url: https://github.com/kiwicopple
 author_image_url: https://github.com/kiwicopple.png
-authorURL: https://github.com/kiwicopple
 image: 2022-january/thumb.jpg
 thumb: 2022-january/thumb.jpg
+categories:
+  - product
 tags:
   - release-notes
 date: '2022-02-22'
 toc_depth: 3
+video: https://www.youtube.com/v/codAs9-NeHM
 ---
 
 This month's beta update is more stacked than the Superbowl (\*Supa-bowl) halftime show. Here’s all of the highlights from January...
@@ -49,7 +51,7 @@ Also added by [devkiran](https://github.com/devkiran).
 
 ### Other SMS providers
 
-Just a reminder, we also support [Twilio](https://supabase.com/docs/guides/auth/auth-twilio) and [MessageBird](https://supabase.com/docs/guides/auth/auth-messagebird).
+Just a reminder, we also support [Twilio](https://supabase.com/docs/guides/auth/phone-login/twilio) and [MessageBird](https://supabase.com/docs/guides/auth/phone-login/messagebird).
 
 On a final note, we are hiring for an [Auth Engineer](https://about.supabase.com/careers/auth-engineers).
 
@@ -108,15 +110,15 @@ There's no stopping [Jon Meyers](https://jonmeyers.io/videos)! He’s back with 
 
 You'll learn how to listen to _any_ database change, then send those changes [in a payload](https://supabase.com/blog/supabase-functions-updates#hook-payload) via HTTP request.
 
-<iframe
-  className="video-with-border w-full"
-  width="640"
-  height="385"
-  src="https://www.youtube-nocookie.com/embed/codAs9-NeHM"
-  frameBorder="1"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-></iframe>
+<div className="video-container">
+  <iframe
+    className="video-with-border w-full"
+    src="https://www.youtube-nocookie.com/embed/codAs9-NeHM"
+    frameBorder="1"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
 
 ## Set your own support ticket priority
 
@@ -140,43 +142,43 @@ Are you maintaining multiple environments? Snaplet helps you copy a production d
 
 Check out the [Supabase clone environments](https://docs.snaplet.dev/tutorials/supabase-clone-environments) tutorial on the Snaplet docs.
 
-<iframe
-  className="video-with-border w-full"
-  width="640"
-  height="385"
-  src="https://www.youtube-nocookie.com/embed/oPtMMhdhEP4"
-  frameBorder="1"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-></iframe>
+<div className="video-container">
+  <iframe
+    className="video-with-border w-full"
+    src="https://www.youtube-nocookie.com/embed/oPtMMhdhEP4"
+    frameBorder="1"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
 
 ### Supabase + Retool
 
 Retool has put together a brilliant 10 minute admin panel setup using Supabase with Retool.
 
-<iframe
-  className="video-with-border w-full"
-  width="640"
-  height="385"
-  src="https://www.youtube-nocookie.com/embed/AgB2-CSrnoI"
-  frameBorder="1"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-></iframe>
+<div className="video-container">
+  <iframe
+    className="video-with-border w-full"
+    src="https://www.youtube-nocookie.com/embed/AgB2-CSrnoI"
+    frameBorder="1"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
 
 ### Learn with Jason
 
-Jason Lengstorf caught up with our very own [Jon Meyers](https://jonmeyers.io/) on his awesome show, [Learn with Jason](https://www.youtube.com/watch?v=8vqY1KT4TLU), to talk about building an app [with Supabase and NextJS](https://supabase.com/docs/guides/with-nextjs).
+Jason Lengstorf caught up with our very own [Jon Meyers](https://jonmeyers.io/) on his awesome show, [Learn with Jason](https://www.youtube.com/watch?v=8vqY1KT4TLU), to talk about building an app [with Supabase and Next.js](https://supabase.com/docs/guides/with-nextjs).
 
-<iframe
-  className="video-with-border w-full"
-  width="640"
-  height="385"
-  src="https://www.youtube-nocookie.com/embed/8vqY1KT4TLU"
-  frameBorder="1"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-></iframe>
+<div className="video-container">
+  <iframe
+    className="video-with-border w-full"
+    src="https://www.youtube-nocookie.com/embed/8vqY1KT4TLU"
+    frameBorder="1"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
 
 ### New article highlights
 
@@ -189,7 +191,7 @@ Jason Lengstorf caught up with our very own [Jon Meyers](https://jonmeyers.io/) 
 One of Supabase’s key tools that allow a lot of our functionality has had some updates.
 
 - `pg_listen` was removed in favor of PostgREST’s built-in schema reloading.
-- PostgREST database connection pool size gets scaled with instance size for better performance for certain workload shapes.
+- PostgREST database connection pool size gets scaled with compute size for better performance for certain workload shapes.
 
 ## Coming Next: Launch Week 4
 
@@ -199,7 +201,7 @@ Of course, we can’t tell you what will happen (perhaps because we don’t know
 
 ## Get started
 
-- Start using Supabase today: **[app.supabase.com](https://app.supabase.com/)**
+- Start using Supabase today: **[supabase.com/dashboard](https://supabase.com/dashboard/)**
 - Make sure to **[star us on GitHub](https://github.com/supabase/supabase)**
 - Follow us **[on Twitter](https://twitter.com/supabase)**
 - Subscribe to our **[YouTube channel](https://www.youtube.com/c/supabase)**

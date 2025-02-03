@@ -1,33 +1,34 @@
-import { useEffect } from 'react'
 import Nav from 'components/Nav/index'
 import Footer from 'components/Footer/index'
+import { cn } from 'ui'
+import { useForceDeepDark } from '~/lib/theme.utils'
 
 type Props = {
   hideHeader?: boolean
   hideFooter?: boolean
+  stickyNavbar?: boolean
+  className?: string
+  footerClassName?: string
   children: React.ReactNode
 }
 
 const DefaultLayout = (props: Props) => {
-  const { hideHeader = false, hideFooter = false, children } = props
+  const {
+    hideHeader = false,
+    hideFooter = false,
+    stickyNavbar = true,
+    className = '',
+    footerClassName = '',
+    children,
+  } = props
 
-  useEffect(() => {
-    const key = localStorage.getItem('supabaseDarkMode')
-    if (!key) {
-      // Default to dark mode if no preference config
-      document.documentElement.className = 'dark'
-    } else {
-      document.documentElement.className = key === 'true' ? 'dark' : ''
-    }
-  }, [])
+  useForceDeepDark()
 
   return (
     <>
-      {!hideHeader && <Nav />}
-      <div className="min-h-screen">
-        <main>{children}</main>
-      </div>
-      {!hideFooter && <Footer />}
+      <Nav hideNavbar={hideHeader} stickyNavbar={stickyNavbar} />
+      <main className={cn('relative min-h-screen', className)}>{children}</main>
+      <Footer className={footerClassName} hideFooter={hideFooter} />
     </>
   )
 }

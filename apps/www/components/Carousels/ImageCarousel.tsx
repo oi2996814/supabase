@@ -1,13 +1,15 @@
-import { Button, IconCornerRightUp, Tabs } from 'ui'
+import { CornerRightUp } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { Button, Tabs } from 'ui'
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
-import 'swiper/swiper.min.css'
+import 'swiper/css'
 
+import { useInView } from 'framer-motion'
 import Image from 'next/image'
 import TextLink from '../TextLink'
 import ImageCarouselStyles from './ImageCarousel.module.css'
@@ -29,6 +31,8 @@ interface ImageCarouselProps {
 }
 
 function ImageCarousel(props: ImageCarouselProps) {
+  const sectionRef = useRef<any>(null)
+  const isInView = useInView(sectionRef, { margin: '75%', once: true })
   // base path for images
   const { basePath } = useRouter()
 
@@ -58,7 +62,7 @@ function ImageCarousel(props: ImageCarouselProps) {
         </p>
       </p>
       <p>
-        <Button type="outline" size="small" icon={<IconCornerRightUp />}>
+        <Button type="outline" size="small" icon={<CornerRightUp />}>
           View documentation
         </Button>
       </p>
@@ -66,7 +70,7 @@ function ImageCarousel(props: ImageCarouselProps) {
   )
 
   return (
-    <div className="grid grid-cols-12">
+    <div className="grid grid-cols-12" ref={sectionRef}>
       <div className="col-span-12 w-full lg:col-span-6">
         <div className="sbui-tabs--alt col-span-12 lg:col-span-7">
           <div className={props.altTabView ? 'hidden' : 'block'}>
@@ -92,7 +96,7 @@ function ImageCarousel(props: ImageCarouselProps) {
             </Tabs>
           </div>
           <div
-            className={`overflow-hidden rounded-md border border-gray-100 bg-gray-800 dark:border-gray-600 ${ImageCarouselStyles['gradient-bg']}`}
+            className={`overflow-hidden rounded-md border border-control bg-border-stronger ${ImageCarouselStyles['gradient-bg']}`}
           >
             <Swiper
               // @ts-ignore
@@ -110,12 +114,13 @@ function ImageCarousel(props: ImageCarouselProps) {
                     {content.img_url && (
                       <Image
                         src={`${basePath}${content.img_url}`}
+                        alt={content.title}
                         layout="responsive"
                         width="1460"
                         height="960"
                       />
                     )}
-                    {content.youtube_id && (
+                    {isInView && content.youtube_id && (
                       <div className="relative w-full" style={{ padding: '56.25% 0 0 0' }}>
                         <iframe
                           title="Demo video showcasing Supabase"
@@ -124,6 +129,7 @@ function ImageCarousel(props: ImageCarouselProps) {
                           style={{ top: 0, left: 0 }}
                           frameBorder="0"
                           allow="autoplay; modestbranding; encrypted-media"
+                          loading="lazy"
                         />
                       </div>
                     )}
@@ -165,12 +171,14 @@ function ImageCarousel(props: ImageCarouselProps) {
           {props.content.map((content, i) => {
             return (
               <SwiperSlide key={i} className="py-4">
-                <h4 className="text-scale-1200 mb-4 text-xl">{content.title}</h4>
+                <h4 className="text-foreground mb-4 text-xl">{content.title}</h4>
                 <p className="p text-base">{content.text}</p>
-                <TextLink
-                  label={content.cta ? content.cta : 'View documentation'}
-                  url={content.url}
-                />
+                {!!content.url && (
+                  <TextLink
+                    label={content.cta ? content.cta : 'View documentation'}
+                    url={content.url}
+                  />
+                )}
               </SwiperSlide>
             )
           })}

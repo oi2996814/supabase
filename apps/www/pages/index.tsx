@@ -1,36 +1,39 @@
-import Container from 'components/Container'
+import dynamic from 'next/dynamic'
+import content from '~/data/home/content'
 import Layout from '~/components/Layouts/Default'
-import Hero from 'components/Hero'
+import Hero from '~/components/Hero/Hero'
+import Logos from '~/components/logos'
 
-import Features from 'components/Features/index'
-import BuiltExamples from 'components/BuiltWithSupabase/index'
-import MadeForDevelopers from 'components/MadeForDevelopers/index'
-import AdminAccess from 'components/AdminAccess/index'
-import CaseStudies from 'components/CaseStudies/index'
-import CTABanner from 'components/CTABanner/index'
-import TwitterSocialSection from '~/components/TwitterSocialSection'
+const Products = dynamic(() => import('~/components/Products/index'))
+const HeroFrameworks = dynamic(() => import('~/components/Hero/HeroFrameworks'))
+const CustomerStories = dynamic(() => import('components/CustomerStories'))
+const BuiltWithSupabase = dynamic(() => import('components/BuiltWithSupabase'))
+const DashboardFeatures = dynamic(() => import('~/components/DashboardFeatures'))
+const TwitterSocialSection = dynamic(() => import('~/components/TwitterSocialSection'))
+const CTABanner = dynamic(() => import('components/CTABanner/index'))
+const ReactTooltip = dynamic(() => import('react-tooltip'), { ssr: false })
 
-// Import Swiper styles if swiper used on page
-import 'swiper/swiper.min.css'
-
-type Props = {}
-
-const Index = ({}: Props) => {
+const Index = () => {
   return (
-    <>
-      <Layout>
-        <Container>
-          <Hero />
-          <Features />
-          <TwitterSocialSection />
-          <BuiltExamples />
-          <MadeForDevelopers />
-          <AdminAccess />
-          <CaseStudies />
-          <CTABanner />
-        </Container>
-      </Layout>
-    </>
+    <Layout>
+      <Hero />
+      <Logos />
+      <Products {...content.productsSection} />
+      <HeroFrameworks />
+      <CustomerStories />
+      <BuiltWithSupabase />
+      <DashboardFeatures {...content.dashboardFeatures} />
+      <TwitterSocialSection />
+      <CTABanner className="border-none" />
+      <ReactTooltip
+        effect="solid"
+        place="bottom"
+        backgroundColor="hsl(var(--background-alternative-default))"
+        textColor="hsl(var(--foreground-light))"
+        className="!max-w-[320px] !px-3 whitespace-pre-line"
+        uuid="homepage-tt"
+      />
+    </Layout>
   )
 }
 

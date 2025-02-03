@@ -1,6 +1,9 @@
-import React from 'react'
-import { Button } from '../../../index'
+'use client'
+
 import * as Dialog from '@radix-ui/react-dialog'
+import React from 'react'
+import { Button } from '../../components/Button/Button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/shadcn/ui/tooltip'
 import styleHandler from '../../lib/theme/styleHandler'
 
 export type SidePanelProps = RadixProps & CustomProps
@@ -18,11 +21,12 @@ interface RadixProps
 
 interface CustomProps {
   id?: String | undefined
+  disabled?: boolean
   className?: String
   children?: React.ReactNode
   header?: string | React.ReactNode
   visible: boolean
-  size?: 'medium' | 'large'
+  size?: 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | 'xxxxlarge'
   loading?: boolean
   align?: 'right' | 'left'
   hideFooter?: boolean
@@ -32,10 +36,12 @@ interface CustomProps {
   onConfirm?: () => void
   confirmText?: String
   triggerElement?: React.ReactNode
+  tooltip?: string
 }
 
 const SidePanel = ({
   id,
+  disabled,
   className,
   children,
   header,
@@ -52,24 +58,37 @@ const SidePanel = ({
   cancelText = 'Cancel',
   triggerElement,
   defaultOpen,
+  tooltip,
   ...props
 }: SidePanelProps) => {
   const __styles = styleHandler('sidepanel')
-
-  // function stopPropagation(e: React.MouseEvent) {
-  //   e.stopPropagation()
-  // }
 
   const footerContent = customFooter ? (
     customFooter
   ) : (
     <div className={__styles.footer}>
-      <Button disabled={loading} type="default" onClick={() => (onCancel ? onCancel() : null)}>
-        {cancelText}
-      </Button>
-      <Button loading={loading} onClick={() => (onConfirm ? onConfirm() : null)}>
-        {confirmText}
-      </Button>
+      <div>
+        <Button disabled={loading} type="default" onClick={() => (onCancel ? onCancel() : null)}>
+          {cancelText}
+        </Button>
+      </div>
+      {onConfirm !== undefined && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="inline-block">
+              <Button
+                htmlType="submit"
+                disabled={disabled || loading}
+                loading={loading}
+                onClick={() => (onConfirm ? onConfirm() : null)}
+              >
+                {confirmText}
+              </Button>
+            </span>
+          </TooltipTrigger>
+          {tooltip !== undefined && <TooltipContent side="bottom">{tooltip}</TooltipContent>}
+        </Tooltip>
+      )}
     </div>
   )
 
@@ -88,7 +107,9 @@ const SidePanel = ({
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange} defaultOpen={defaultOpen}>
       {triggerElement && (
-        <Dialog.Trigger className={__styles.trigger}>{triggerElement}</Dialog.Trigger>
+        <Dialog.Trigger asChild className={__styles.trigger}>
+          {triggerElement}
+        </Dialog.Trigger>
       )}
 
       <Dialog.Portal>
@@ -104,7 +125,11 @@ const SidePanel = ({
           onCloseAutoFocus={props.onCloseAutoFocus}
           onEscapeKeyDown={props.onEscapeKeyDown}
           onPointerDownOutside={props.onPointerDownOutside}
-          onInteractOutside={props.onInteractOutside}
+          onInteractOutside={(event) => {
+            const isToast = (event.target as Element)?.closest('#toast')
+            if (isToast) event.preventDefault()
+            if (props.onInteractOutside) props.onInteractOutside(event)
+          }}
         >
           {header && <header className={__styles.header}>{header}</header>}
           <div className={__styles.contents}>{children}</div>
@@ -121,10 +146,16 @@ export function Separator() {
   return <div className={__styles.separator}></div>
 }
 
-export function Content({ children }: { children: React.ReactNode }) {
+export function Content({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
   let __styles = styleHandler('sidepanel')
 
-  return <div className={__styles.content}>{children}</div>
+  return <div className={[__styles.content, className].join(' ').trim()}>{children}</div>
 }
 
 SidePanel.Content = Content

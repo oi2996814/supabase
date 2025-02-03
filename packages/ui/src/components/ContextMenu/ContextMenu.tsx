@@ -1,14 +1,11 @@
+'use client'
+
 import React, { useState } from 'react'
-
-// import * as RadixContextMenu from '@radix-ui/react-dropdown-menu'
-import { IconCheck } from '../Icon/icons/IconCheck'
-
-// @ts-ignore
-// import ContextMenuStyles from './ContextMenu.module.css'
 
 import type * as RadixContextMenuTypes from '@radix-ui/react-context-menu/'
 
 import * as RadixContextMenu from '@radix-ui/react-context-menu'
+import { Check } from 'lucide-react'
 
 const ContextMenuStyles = {}
 
@@ -21,6 +18,9 @@ interface RootProps {
   style?: React.CSSProperties
 }
 
+/**
+ * @deprecated Use ./ContextMenu_shadcn_ instead
+ */
 function ContextMenu({
   onOpenChange,
 
@@ -43,7 +43,7 @@ function ContextMenu({
       </RadixContextMenu.Trigger>
 
       <RadixContextMenu.Content
-        sideOffset={alignOffset}
+        alignOffset={alignOffset}
         // className={classes.join(' ')}
         style={style}
       >
@@ -60,6 +60,9 @@ interface ItemProps {
   onClick?: (event: Event) => void
 }
 
+/**
+ * @deprecated Use ./ContextMenuItem_shadcn_ instead
+ */
 export function Item({ children, icon, disabled, onClick }: ItemProps) {
   return (
     <RadixContextMenu.Item
@@ -73,6 +76,9 @@ export function Item({ children, icon, disabled, onClick }: ItemProps) {
   )
 }
 
+/**
+ * @deprecated Use ./ContextMenu_shadcn_ instead
+ */
 export function Misc({ children, icon }: ItemProps) {
   return (
     <div
@@ -92,6 +98,9 @@ interface CheckboxProps {
   ItemIndicator?: React.ReactNode
 }
 
+/**
+ * @deprecated Use ./ContextMenuCheckboxItem_shadcn_ instead
+ */
 export function Checkbox({
   children,
   checked: propsChecked,
@@ -116,7 +125,7 @@ export function Checkbox({
       <RadixContextMenu.ItemIndicator
       // className={ContextMenuStyles['sbui-contextmenu-input__check']}
       >
-        {ItemIndicator ? ItemIndicator : <IconCheck size="tiny" />}
+        {ItemIndicator ? ItemIndicator : <Check size={14} />}
         <RadixContextMenu.CheckboxItem />
       </RadixContextMenu.ItemIndicator>
       <span>{children}</span>
@@ -130,6 +139,9 @@ interface RadioProps {
   ItemIndicator?: React.ReactNode
 }
 
+/**
+ * @deprecated Use ./ContextMenuRadioItem_shadcn_ instead
+ */
 export function Radio({ children, value, ItemIndicator }: RadioProps) {
   return (
     <RadixContextMenu.RadioItem
@@ -139,7 +151,7 @@ export function Radio({ children, value, ItemIndicator }: RadioProps) {
       <RadixContextMenu.ItemIndicator
       // className={ContextMenuStyles['sbui-contextmenu-input__check']}
       >
-        {ItemIndicator ? ItemIndicator : <IconCheck size="tiny" />}
+        {ItemIndicator ? ItemIndicator : <Check size={14} />}
       </RadixContextMenu.ItemIndicator>
       <span>{children}</span>
     </RadixContextMenu.RadioItem>
@@ -152,11 +164,10 @@ interface RadioGroupProps {
   onChange?(x: string): void
 }
 
-export function RadioGroup({
-  children,
-  value: propsValue,
-  onChange,
-}: RadioGroupProps) {
+/**
+ * @deprecated Use ./ContextMenuRadioGroup_shadcn_ instead
+ */
+export function RadioGroup({ children, value: propsValue, onChange }: RadioGroupProps) {
   const [value, setValue] = useState(propsValue ? propsValue : '')
 
   const handleChange = (e: string) => {
@@ -175,6 +186,9 @@ interface LabelProps {
   children: React.ReactNode
 }
 
+/**
+ * @deprecated Use ./ContextMenuLabel_shadcn_ instead
+ */
 export function Label({ children }: LabelProps) {
   return (
     <RadixContextMenu.Label

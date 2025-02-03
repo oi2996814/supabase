@@ -1,74 +1,132 @@
+import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+// import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
+import { Session } from '@supabase/supabase-js'
+import { LW13_DATE, LW13_TITLE, LW_URL, SITE_ORIGIN } from '~/lib/constants'
+import supabase from '~/lib/supabase'
+
 import DefaultLayout from '~/components/Layouts/Default'
+import { TicketState, ConfDataContext, UserData } from '~/components/LaunchWeek/hooks/use-conf-data'
 import SectionContainer from '~/components/Layouts/SectionContainer'
-import _days from '~/components/LaunchWeek/days.json'
-import HackathonSection from '~/components/LaunchWeek/HackathonSection'
-import LaunchHero from '~/components/LaunchWeek/LaunchHero'
-import { LaunchSection } from '~/components/LaunchWeek/LaunchSection'
-import PreLaunchTeaser from '~/components/LaunchWeek/PreLaunchTeaser'
-import ScheduleInfo from '~/components/LaunchWeek/ScheduleInfo'
-import { WeekDayProps } from '~/components/LaunchWeek/types'
+// import { Meetup } from '~/components/LaunchWeek/13/LWMeetups'
+import LWStickyNav from '~/components/LaunchWeek/13/Releases/LWStickyNav'
+import LWHeader from '~/components/LaunchWeek/13/Releases/LWHeader'
+import MainStage from '~/components/LaunchWeek/13/Releases/MainStage'
 
-const days = _days as WeekDayProps[]
+const BuildStage = dynamic(() => import('~/components/LaunchWeek/13/Releases/BuildStage'))
+const CTABanner = dynamic(() => import('~/components/CTABanner'))
+const TicketingFlow = dynamic(() => import('~/components/LaunchWeek/13/Ticket/TicketingFlow'))
+// const LW13Meetups = dynamic(
+//   () => import('~/components/LaunchWeek/13/LWMeetups')
+// )
 
-export default function launchweek() {
-  const shippingHasStarted = days[0].shipped
-  const title = 'Launch Week 5'
-  const description = 'Supabase Launch Week 5 | 15-19 Aug 2022'
+export default function LaunchWeekIndex() {
+  const { query } = useRouter()
+
+  const TITLE = `${LW13_TITLE} | ${LW13_DATE}`
+  const DESCRIPTION = 'Join us for a week of announcing new features, every day at 7 AM PT.'
+  const OG_IMAGE = `${SITE_ORIGIN}/images/launchweek/12/lw13-og.png?lw=12`
+
+  const ticketNumber = query.ticketNumber?.toString()
+  const [session, setSession] = useState<Session | null>(null)
+  const [showCustomizationForm, setShowCustomizationForm] = useState<boolean>(false)
+
+  const defaultUserData = {
+    id: query.id?.toString(),
+    ticket_number: ticketNumber ? parseInt(ticketNumber, 10) : undefined,
+    name: query.name?.toString(),
+    username: query.username?.toString(),
+    platinum: !!query.platinum,
+  }
+
+  const [userData, setUserData] = useState<UserData>(defaultUserData)
+  const [ticketState, setTicketState] = useState<TicketState>('loading')
+
+  useEffect(() => {
+    if (supabase) {
+      supabase.auth.getSession().then(({ data: { session } }) => setSession(session))
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        setSession(session)
+      })
+
+      return () => subscription.unsubscribe()
+    }
+  }, [supabase])
+
+  useEffect(() => {
+    if (session?.user) {
+      if (userData?.id) {
+        return setTicketState('ticket')
+      }
+      return setTicketState('loading')
+    }
+    if (!session) return setTicketState('registration')
+  }, [session, userData])
 
   return (
     <>
       <NextSeo
-        title={title}
+        title={TITLE}
+        description={DESCRIPTION}
         openGraph={{
-          title: title,
-          description: description,
-          url: `https://supabase.com/launch-week`,
+          title: TITLE,
+          description: DESCRIPTION,
+          url: LW_URL,
           images: [
             {
-              url: `https://supabase.com/images/launchweek/og-image.jpg`,
+              url: OG_IMAGE,
             },
           ],
         }}
       />
-      <div className="launch-week-gradientBg"></div>
-      <DefaultLayout>
-        <SectionContainer className="flex flex-col gap-8 !pb-0 md:gap-16 lg:gap-16">
-          <img
-            src="/images/launchweek/launchweek-logo--light.svg"
-            className="md:40 w-28 dark:hidden lg:w-48"
-          />
-          <img
-            src="/images/launchweek/launchweek-logo--dark.svg"
-            className="md:40 hidden w-28 dark:block lg:w-48"
-          />
-          <LaunchHero />
-          {!shippingHasStarted && <PreLaunchTeaser />}
-        </SectionContainer>
-        <SectionContainer
-          className={[
-            'grid flex-col gap-24 lg:gap-16',
-            !shippingHasStarted && 'lg:grid-cols-2 ',
-          ].join(' ')}
-        >
-          {!shippingHasStarted && <ScheduleInfo />}
-          <div>
-            {days.map((item: WeekDayProps, i) => {
-              return (
-                <LaunchSection
-                  key={'launchweek-item ' + (item.title || i)}
-                  {...item}
-                  index={i}
-                  shippingHasStarted={shippingHasStarted}
-                />
-              )
-            })}
-          </div>
-        </SectionContainer>
-        <SectionContainer>
-          <HackathonSection />
-        </SectionContainer>
-      </DefaultLayout>
+      <ConfDataContext.Provider
+        value={{
+          supabase,
+          session,
+          userData,
+          setUserData,
+          ticketState,
+          setTicketState,
+          showCustomizationForm,
+          setShowCustomizationForm,
+        }}
+      >
+        <DefaultLayout>
+          <LWStickyNav />
+          <LWHeader />
+          <MainStage className="relative z-10" />
+          <BuildStage />
+          {/* <SectionContainer id="meetups" className="scroll-mt-[60px] lw-nav-anchor">
+            <LW13Meetups meetups={meetups} />
+          </SectionContainer> */}
+          <SectionContainer
+            className="relative !max-w-none border-t border-muted !py-8 scroll-mt-[60px] lw-nav-anchor overflow-hidden"
+            id="ticket"
+          >
+            <TicketingFlow />
+          </SectionContainer>
+          <CTABanner />
+        </DefaultLayout>
+      </ConfDataContext.Provider>
     </>
   )
 }
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const { data: meetups } = await supabase!
+//     .from('meetups')
+//     .select('*')
+//     .eq('launch_week', 'lw13')
+//     .neq('is_published', false)
+//     .order('start_at')
+
+//   return {
+//     props: {
+//       meetups,
+//     },
+//   }
+// }
