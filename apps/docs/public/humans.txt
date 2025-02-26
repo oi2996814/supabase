@@ -3,63 +3,101 @@ TEAM
 Supabase is 100% remote.
 
 Alaister Young
+Aleksi Immonen
+Alexander Korotkov
 Amy Q
-Andrew Smith
+Andrew Valleteau
 Angelico de los Reyes
 Ant Wilson
 Ariuna K
+Artur Zakirov
 Beng Eu
 Bo Lu
 Bobbie Soedirgo
+Carel de Waal
+Chandana Anumula
+Charis Lam
 Chase Granberry
+Chris Caruso
+Chris Chandler
 Chris Copplestone
-Danny Ng
+Chris Gwilliams
+Chris Stockton
+Craig Cannon
 Dave Wilson
-David Thyresson
+Deji I
 Div Arora
+Divit D
 Egor Romanov
+Etienne Stalmans
 Fabrizio Fenoglio
-Francisco Mazzoni
+Francesco Sansalvadore
+Greg P
+Greg Richardson
+Guilherme Souza
+Haydn Maley
 Hieu Pham
+Illia Basalaiev
 Inian P
-Isaiah Hamilton
+Ivan Vasilov
+Jenny Kibiri
 Jess Shears
-Joel Lee
+John Pena
 Jon M
 Jonny Summers-Muir
+Jordi Enric
+José Luis Ledesma
 Joshen Lim
+Julien Goux
+Kamil Ogórek
 Kang Ming Tay
+Karan S
+Karlo Ison
+Kevin Brolly
 Kevin Grüneberg
-Lakshmipathi G
+Lakshan Perera
 Laura C
-Leo T
+Laurence Isla
+Long Hoang
+Łukasz Niemier
 Margarita Sandomirskaia
-Marijana Šimag
 Mark Burggraf
-Michel Pelletier
-Monica El Khoury
-Nikita Kotlyarov
+Monica Khoury
+Nyannyacha
 Oli R
+Pamela Chia
+Paul Caselton
 Paul Cioanca
 Paul Copplestone
 Pavel Borisov
+Peter Lyn
 Qiao Han
-Ramiro Nuñez Dosio
-Rodrigo Mansueli Nunes
+Raminder Singh
+Rodrigo Mansueli
 Rory Wilding
+Sam Rose
+Sreyas Udayavarman
 Stanislav M
+Stephen Morgan
 Steve Chavez
 Stojan Dimitrovski
+Supun Sudaraka Kalidasa
 Terry Sutton
+Thomas E
 Thor Schaeff
+Tom Ashley
+Tom G
+Tyler Hillery
+Tyler Fontaine
 Tyler Shukert
 TzeYiing L
 Wen Bo Xie
+Yuri Santana
 ____________
 
 JOBS
 
-If you are interested in working with us check out the open roles here: https://about.supabase.com/careers
+If you are interested in working with us check out the open roles here: https://supabase.com/careers
 
 ___________
 
@@ -68,10 +106,11 @@ TECHNOLOGIES
 
 Supabase would not be possible without the work of some other amazing open source contributors.
 
-- Postgres - https://www.postgresql.org/docs/devel/git.html
+- Postgres - https://www.postgresql.org/
 - PostgREST - https://github.com/PostgREST
 - Kong - https://github.com/kong/
 - Next.js - https://nextjs.org/
 - Tailwind CSS - https://tailwindcss.com/
+- shadcn/ui - https://ui.shadcn.com/
 - Phoenix - https://www.phoenixframework.org/
 - GoTrue - https://github.com/netlify/gotrue

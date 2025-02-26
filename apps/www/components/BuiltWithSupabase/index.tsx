@@ -1,50 +1,58 @@
-import { useRouter } from 'next/router'
-import { Button, IconGitHub } from 'ui'
-import SectionContainer from '../Layouts/SectionContainer'
+import { Button, cn, IconGitHubSolid } from 'ui'
+import Link from 'next/link'
+
+import SectionContainer from '~/components/Layouts/SectionContainer'
 import ExampleCard from '../ExampleCard'
 
-import Examples from 'data/Examples.json'
-import Link from 'next/link'
-// import Button from '../Button'
+import Examples from 'data/Examples'
+import ExamplesMobile from './ExamplesMobile'
 
-const BuiltExamples = () => {
-  const { basePath } = useRouter()
+const BuiltWithSupabase = () => {
   return (
-    <SectionContainer className="xl:pt-32">
-      <div className="text-center">
-        <h3 className="h2">What can you build with supabase?</h3>
-        <p className="p">There are many example apps and starter projects to get going</p>
-        <div className="flex justify-center gap-2 py-4">
-          <Link href="/docs/guides/examples" as="/docs/guides/examples" passHref>
-            <Button as="a" type="default" size="small">
-              View all examples
+    <>
+      <SectionContainer id="examples" className="xl:pt-32 !pb-0">
+        <div className="text-center flex flex-col items-center">
+          <h3 className="h2">Start building in seconds</h3>
+          <p className="p max-w-[300px] md:max-w-none">
+            Kickstart your next project with templates built by us and our community.
+          </p>
+          <div className="flex justify-center gap-2 py-4">
+            <Button asChild type="default" size="small" className="h-full">
+              <Link href="/docs/guides/examples">View all examples</Link>
             </Button>
-          </Link>
-          <Link
-            href="https://github.com/supabase/supabase/tree/master/examples"
-            as="https://github.com/supabase/supabase/tree/master/examples"
-            passHref
-          >
-            <Button as="a" type="default" icon={<IconGitHub />} size="small">
-              Official github library
-            </Button>
-          </Link>
-        </div>
-      </div>
-      <div className="mt-16 grid grid-cols-12 gap-5">
-        {Examples.slice(0, 6).map((example, i) => {
-          return (
-            <div
-              className={`col-span-12 lg:col-span-6 xl:col-span-4 ${i > 2 && `sm:hidden lg:block`}`}
-              key={i}
+            <Button
+              asChild
+              type="default"
+              icon={<IconGitHubSolid size="tiny" className="!w-full !h-full" />}
+              size="small"
             >
-              <ExampleCard {...example} />
-            </div>
-          )
-        })}
-      </div>
-    </SectionContainer>
+              <Link href="https://github.com/supabase/supabase/tree/master/examples">
+                Official GitHub library
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </SectionContainer>
+      <SectionContainer className="relative w-full !px-0 lg:!px-16 xl:!px-20 !pb-0 mb-16 md:mb-12 lg:mb-12 !pt-6 max-w-[1400px]">
+        <ExamplesMobile examples={Examples.slice(0, 6)} className="lg:hidden" />
+        <div className="hidden lg:grid grid-cols-12 gap-5 mt-4">
+          {Examples.slice(0, 6).map((example, i) => {
+            return (
+              <div
+                className={cn(
+                  'col-span-12 h-full lg:col-span-6 xl:col-span-4',
+                  'flex items-stretch'
+                )}
+                key={i}
+              >
+                <ExampleCard {...example} showProducts inHomepage />
+              </div>
+            )
+          })}
+        </div>
+      </SectionContainer>
+    </>
   )
 }
 
-export default BuiltExamples
+export default BuiltWithSupabase

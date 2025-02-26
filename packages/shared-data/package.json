@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "description": "Data shared between Supabase apps",
   "main": "./index.ts",
+  "types": "./index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preinstall": "npx only-allow pnpm",
+    "clean": "rimraf node_modules"
   },
   "author": "",
   "license": "MIT"

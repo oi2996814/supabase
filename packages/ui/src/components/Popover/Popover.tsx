@@ -1,9 +1,9 @@
-import React from 'react'
+'use client'
 
+import type * as RadixPopoverTypes from '@radix-ui/react-popover'
 import * as RadixPopover from '@radix-ui/react-popover'
-import type * as RadixPopoverTypes from '@radix-ui/react-popover/'
-
-import { IconX } from '../Icon/icons/IconX'
+import * as React from 'react'
+import { X } from 'lucide-react'
 
 import styleHandler from '../../lib/theme/styleHandler'
 
@@ -14,11 +14,11 @@ interface RootProps {
   children?: React.ReactNode
   className?: string
   defaultOpen?: boolean
+  disabled?: boolean
   modal?: boolean
   onOpenChange?: RadixPopoverTypes.PopoverProps['onOpenChange']
   open?: boolean
   overlay?: React.ReactNode
-  portalled?: boolean
   showClose?: boolean
   side?: RadixPopoverTypes.PopoverContentProps['side']
   sideOffset?: RadixPopoverTypes.PopoverContentProps['sideOffset']
@@ -26,8 +26,12 @@ interface RootProps {
   header?: React.ReactNode
   footer?: React.ReactNode
   size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge' | 'content'
+  'data-testid'?: string
 }
 
+/**
+ * @deprecated Use ./Popover_shadcn_ instead
+ */
 function Popover({
   align = 'center',
   ariaLabel,
@@ -39,13 +43,14 @@ function Popover({
   onOpenChange,
   open,
   overlay,
-  portalled,
   side = 'bottom',
   sideOffset = 6,
   style,
   header,
   footer,
   size = 'content',
+  disabled,
+  'data-testid': dataTestId,
 }: RootProps) {
   const __styles = styleHandler('popover')
 
@@ -63,44 +68,53 @@ function Popover({
     >
       <RadixPopover.Trigger
         // className={DropdownStyles['sbui-popover__trigger']}
+        disabled={disabled}
         className={__styles.trigger}
         aria-label={ariaLabel}
+        data-testid={dataTestId}
       >
         {children}
       </RadixPopover.Trigger>
 
-      <RadixPopover.Content
-        sideOffset={sideOffset}
-        side={side}
-        align={align}
-        className={classes.join(' ')}
-        style={style}
-        portalled={portalled}
-      >
-        {arrow && (
-          <RadixPopover.Arrow
-            // className={DropdownStyles['sbui-popover__arrow']}
-            offset={10}
-          ></RadixPopover.Arrow>
-        )}
-        {header && <div className={__styles.header}>{header}</div>}
-        {overlay}
-        {footer && <div className={__styles.footer}>{footer}</div>}
-      </RadixPopover.Content>
+      <RadixPopover.Portal>
+        <RadixPopover.Content
+          sideOffset={sideOffset}
+          side={side}
+          align={align}
+          className={classes.join(' ')}
+          style={style}
+        >
+          {arrow && (
+            <RadixPopover.Arrow
+              // className={DropdownStyles['sbui-popover__arrow']}
+              offset={10}
+            ></RadixPopover.Arrow>
+          )}
+          {header && <div className={__styles.header}>{header}</div>}
+          {overlay}
+          {footer && <div className={__styles.footer}>{footer}</div>}
+        </RadixPopover.Content>
+      </RadixPopover.Portal>
     </RadixPopover.Root>
   )
 }
 
+/**
+ * @deprecated Use ./Popover_shadcn_ instead
+ */
 function Close() {
   const __styles = styleHandler('popover')
 
   return (
     <RadixPopover.Close className={__styles.close}>
-      <IconX size={14} strokeWidth={2} />
+      <X size={14} strokeWidth={2} />
     </RadixPopover.Close>
   )
 }
 
+/**
+ * @deprecated Use ./PopoverSeparator_Shadcn_ instead
+ */
 function Separator() {
   const __styles = styleHandler('popover')
 

@@ -1,17 +1,18 @@
-import React, { useState } from 'react'
-import { TabsContext } from './TabsContext'
+'use client'
 
 import * as TabsPrimitive from '@radix-ui/react-tabs'
-import { useRouter } from 'next/router'
-
-// @ts-ignore
-// import TabsStyles from './Tabs.module.css'
-
+import {
+  Children,
+  useMemo,
+  useState,
+  type KeyboardEvent,
+  type PropsWithChildren,
+  type RefObject,
+} from 'react'
 import styleHandler from '../../lib/theme/styleHandler'
 
-interface TabsProps {
-  type?: 'pills' | 'underlined' | 'cards'
-  children: any
+export interface TabsProps {
+  type?: 'pills' | 'underlined' | 'cards' | 'rounded-pills'
   defaultActiveId?: string
   activeId?: string
   size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge'
@@ -21,13 +22,25 @@ interface TabsProps {
   onChange?: any
   onClick?: any
   scrollable?: boolean
+  wrappable?: boolean
   addOnBefore?: React.ReactNode
   addOnAfter?: React.ReactNode
   listClassNames?: string
+  baseClassNames?: string
+  refs?: {
+    base: RefObject<HTMLDivElement> | ((elem: HTMLDivElement | null) => void)
+    list: RefObject<HTMLDivElement> | ((elem: HTMLDivElement | null) => void)
+  }
 }
 
-function Tabs({
-  children,
+interface TabsSubComponents {
+  Panel: React.FC<PropsWithChildren<PanelProps>>
+}
+
+/**
+ * @deprecated Use ./Tabs_shadcn_ instead
+ */
+const Tabs: React.FC<PropsWithChildren<TabsProps>> & TabsSubComponents = ({
   defaultActiveId,
   activeId,
   type = 'pills',
@@ -36,58 +49,54 @@ function Tabs({
   onChange,
   onClick,
   scrollable,
+  wrappable,
   addOnBefore,
   addOnAfter,
   listClassNames,
-}: TabsProps) {
+  baseClassNames,
+  refs,
+  children: _children,
+}) => {
+  const children = Children.toArray(_children) as PanelPropsProps[]
+
   const [activeTab, setActiveTab] = useState(
-    defaultActiveId
-      ? defaultActiveId
-      : // if no defaultActiveId is set use the first panel
-      children && children[0].props
-      ? children[0].props.id
-      : ''
+    activeId ??
+      defaultActiveId ??
+      // if no defaultActiveId is set use the first panel
+      children?.[0]?.props?.id
   )
 
-  const router = useRouter()
-  const hash = router.asPath?.split('#')[1]?.toUpperCase()
+  useMemo(() => {
+    if (activeId && activeId !== activeTab) setActiveTab(activeId)
+  }, [activeId])
 
   let __styles = styleHandler('tabs')
 
-  // activeId state can be overriden externally with `active`
-  // defaults to the first panelif we have one or url hash if not
-  const active = activeId ? activeId : activeTab ? activeTab : hash
-
   function onTabClick(id: string) {
-    const newTabSelected = id !== active
-    setActiveTab(id)
-    if (onClick) onClick(id)
-    if (onChange && newTabSelected) onChange(id)
+    onClick?.(id)
+    if (id !== activeTab) {
+      onChange?.(id)
+      setActiveTab(id)
+    }
   }
-
-  // for styling the tabs for underline style
-  const underlined = type === 'underlined'
-  // for styling the tabs for cards style
 
   const listClasses = [__styles[type].list]
   if (scrollable) listClasses.push(__styles.scrollable)
+  if (wrappable) listClasses.push(__styles.wrappable)
   if (listClassNames) listClasses.push(listClassNames)
 
-  // if only 1 react child, it needs to be converted to a list/array
-  // this is so 1 tab can be displayed
-  if (children && !Array.isArray(children)) {
-    children = [children]
-  }
-
   return (
-    <TabsPrimitive.Root defaultValue={defaultActiveId} value={active} className={__styles.base}>
-      <TabsPrimitive.List className={listClasses.join(' ')}>
+    <TabsPrimitive.Root
+      value={activeTab}
+      className={[__styles.base, baseClassNames].join(' ')}
+      ref={refs?.base}
+    >
+      <TabsPrimitive.List className={listClasses.join(' ')} ref={refs?.list}>
         {addOnBefore}
-        {children.map((tab: any) => {
-          const activeMatch = active === tab.props.id
-
+        {children.map((tab) => {
+          const isActive = activeTab === tab.props.id
           const triggerClasses = [__styles[type].base, __styles.size[size]]
-          if (activeMatch) {
+          if (isActive) {
             triggerClasses.push(__styles[type].active)
           } else {
             triggerClasses.push(__styles[type].inactive)
@@ -98,8 +107,8 @@ function Tabs({
 
           return (
             <TabsPrimitive.Trigger
-              onKeyDown={(e: any) => {
-                if (e.keyCode === 13) {
+              onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
+                if (e.key === 'Enter') {
                   e.preventDefault()
                   onTabClick(tab.props.id)
                 }
@@ -111,38 +120,40 @@ function Tabs({
             >
               {tab.props.icon}
               <span>{tab.props.label}</span>
+              {tab.props.iconRight}
             </TabsPrimitive.Trigger>
           )
         })}
-        {/* </Space> */}
         {addOnAfter}
       </TabsPrimitive.List>
-      <TabsContext.Provider value={{ activeId: active }}>{children}</TabsContext.Provider>
+      {children as any}
     </TabsPrimitive.Root>
   )
 }
 
+// bit of a hack because we map over the JSX in the parent component
+interface PanelPropsProps {
+  props: PanelProps
+}
+
 interface PanelProps {
-  children?: React.ReactNode
   id: string
   label?: string
   icon?: React.ReactNode
+  iconRight?: React.ReactNode
+  className?: string
 }
 
-export function Panel({ children, id }: PanelProps) {
+/**
+ * @deprecated Use ./TabsContent_Shadcn_ instead
+ */
+export const Panel: React.FC<PropsWithChildren<PanelProps>> = ({ children, id, className }) => {
   let __styles = styleHandler('tabs')
 
   return (
-    <TabsContext.Consumer>
-      {({ activeId }) => {
-        const active = activeId === id
-        return (
-          <TabsPrimitive.Content value={id} className={__styles.content}>
-            {children}
-          </TabsPrimitive.Content>
-        )
-      }}
-    </TabsContext.Consumer>
+    <TabsPrimitive.Content value={id} className={[__styles.content, className].join(' ')}>
+      {children}
+    </TabsPrimitive.Content>
   )
 }
 

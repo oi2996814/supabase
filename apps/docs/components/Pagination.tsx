@@ -1,5 +1,5 @@
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { IconArrowLeft, IconArrowRight } from 'ui'
 
 const Pagination = ({ currentPage, totalCount }: { currentPage: number; totalCount: number }) => {
   // TODO: not sure if this is the most efficient way to do this. may need to refactor.
@@ -11,39 +11,34 @@ const Pagination = ({ currentPage, totalCount }: { currentPage: number; totalCou
   return (
     <ul className="flex justify-center space-x-1 text-xs font-medium">
       <li>
-        <Link href={`/discussions?page=${currentPage - 1}`}>
-          <a className="border-scale-600 bg-scale-300 inline-flex h-8 w-8 items-center justify-center rounded border">
-            <IconArrowLeft
-              className="stroke-2 transition group-hover:-translate-x-1"
-              height={12.5}
-            />
-          </a>
+        <Link
+          href={`/discussions?page=${currentPage - 1}`}
+          className="border border-control bg-surface-100 inline-flex h-8 w-8 items-center justify-center rounded"
+        >
+          <ArrowLeft className="stroke-2 transition group-hover:-translate-x-1" height={12.5} />
         </Link>
       </li>
       {pages.map((page: number, i: number) => {
         i = i + 1
         return (
           <li key={i}>
-            <Link href={`/discussions?page=${page}`}>
-              <a
-                className={`border-scale-600 inline-flex h-8 w-8 items-center justify-center rounded border ${
-                  currentPage === page ? 'bg-brand-900' : 'bg-scale-300'
-                }`}
-              >
-                {page}
-              </a>
+            <Link
+              href={`/discussions?page=${page}`}
+              className={`border-scale-600 inline-flex h-8 w-8 items-center justify-center rounded border ${
+                currentPage === page ? 'bg-brand' : 'bg-surface-100'
+              }`}
+            >
+              {page}
             </Link>
           </li>
         )
       })}
       <li>
-        <Link href={`/discussions?page=${currentPage + 1}`}>
-          <a className="border-scale-600 bg-scale-300 inline-flex h-8 w-8 items-center justify-center rounded border">
-            <IconArrowRight
-              className="stroke-2 transition group-hover:-translate-x-1"
-              height={12.5}
-            />
-          </a>
+        <Link
+          href={`/discussions?page=${currentPage + 1}`}
+          className="border-control bg-surface-100 inline-flex h-8 w-8 items-center justify-center rounded border"
+        >
+          <ArrowRight className="stroke-2 transition group-hover:-translate-x-1" height={12.5} />
         </Link>
       </li>
     </ul>

@@ -5,9 +5,11 @@ author: angelico_de_los_reyes
 author_title: Supabase
 author_url: https://github.com/dragarcia
 author_image_url: https://avatars0.githubusercontent.com/u/26374889?s=400&u=f5e35e9b47a50fa2b4d8c4bb96babd921071bcf1&v=4
-authorURL: https://github.com/dragarcia
+categories:
+  - postgres
 tags:
   - postgres
+  - planetpg
 date: '08-02-2020'
 ---
 
@@ -94,7 +96,7 @@ $ sudo -su postgres envdir /etc/wal-g.d/env /usr/local/bin/wal-g backup-push /va
 
 At this point, if you were to check the S3 path that you provided, the following two newly created and populated directories would be observed:
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/i/lai1mxg62kffyd2khmtm.png)
+![Alt Text](/images/blog/2020/lai1mxg62kffyd2khmtm.png)
 
 From then on, subsequent physical backups would be found in the directory `basebackups_005` and any WAL archives would be sent to the directory `wal_005`.
 

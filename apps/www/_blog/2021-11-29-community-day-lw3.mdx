@@ -4,14 +4,16 @@ description: Kicking off launch week by highlighting the communities around Supa
 author: thor_schaeff
 author_url: https://github.com/thorwebdev
 author_image_url: https://github.com/thorwebdev.png
-authorURL: https://github.com/thorwebdev
 image: launch-week-three/community-day/supabase-oss.jpg
 thumb: launch-week-three/community-day/supabase-oss.jpg
+categories:
+  - developers
 tags:
   - launch-week
   - community
 date: '2021-11-29'
 toc_depth: 2
+video: https://www.youtube.com/v/6ptUrE4QRPQ
 ---
 
 Supabase combines existing open-source tools with our own open-source contributions to provide a delightful experience for developers. As part of this goal we hope to build a community of communities, bringing together developers from many different tools, as well as new developers looking to get involved with open source.
@@ -22,19 +24,19 @@ So let's get cracking, we've got a lot to cover. 🚀
 
 ## Open Source Spotlight: Kong API Gateway
 
-Supabase provides a whole bunch of features that are made up of a [collection of open-source tools](/docs/architecture). To orchestrate these different services and functionalities we use the [Kong API Gateway](https://github.com/Kong/kong).
+Supabase provides a whole bunch of features that are made up of a [collection of open-source tools](/docs/guides/getting-started/architecture). To orchestrate these different services and functionalities we use the [Kong API Gateway](https://github.com/Kong/kong).
 
 As a user of our hosted offering you don't really need to know all this, but we love showcasing the amazing open-source tools that we work with, and so we've invited [Vik Gamov](https://twitter.com/gAmUssA) to give you a little intro to [Kong](https://github.com/Kong/kong):
 
-<iframe
-  className="w-full"
-  width="700"
-  height="350"
-  src="https://www.youtube-nocookie.com/embed/6ptUrE4QRPQ"
-  frameBorder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen
-></iframe>
+<div className="video-container">
+  <iframe
+    className="w-full"
+    src="https://www.youtube-nocookie.com/embed/6ptUrE4QRPQ"
+    frameBorder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>
 
 ## PostgreSQL 14 updates
 
@@ -77,11 +79,11 @@ GitGuardian helps developers keep 250+ types of secrets out of source code. Thei
 
 ![new-oauth-providers.jpg](/images/blog/launch-week-three/community-day/new-oauth-providers.jpg)
 
-The beauty of building in the open is that the community can get involved in adding new OAuth providers, which is exactly what [@TheHarryET](https://twitter.com/TheHarryET) and [MonsterDeveloper](https://github.com/MonsterDeveloper) have been doing. Thanks to them you can now provide sign-in with [Slack](/docs/guides/auth/auth-slack) as well as [Spotify](/docs/guides/auth/auth-spotify) to your users, as well as use [MessageBird](/docs/guides/auth/auth-messagebird) for phone auth as an alternative to the existing [Twilio](/docs/guides/auth/auth-twilio) integration.
+The beauty of building in the open is that the community can get involved in adding new OAuth providers, which is exactly what [@TheHarryET](https://twitter.com/TheHarryET) and [MonsterDeveloper](https://github.com/MonsterDeveloper) have been doing. Thanks to them you can now provide sign-in with [Slack](/docs/guides/auth/social-login/auth-slack) as well as [Spotify](/docs/guides/auth/social-login/auth-spotify) to your users, as well as use [MessageBird](/docs/guides/auth/phone-login/messagebird) for phone auth as an alternative to the existing [Twilio](/docs/guides/auth/phone-login/twilio) integration.
 
 ## SupaSquad updates
 
-The [SupaSquad](/docs/handbook/supasquad) is an official Supabase advocate program where community members help build and manage the Supabase community.
+The [SupaSquad](/supasquad) is an official Supabase advocate program where community members help build and manage the Supabase community.
 
 Among many other awesome things, the SupaSquad has been absolutely on fire building [client libraries](/docs/reference/javascript/installing) for all flavors of backends and environments.
 
@@ -99,9 +101,9 @@ Among many other awesome things, the SupaSquad has been absolutely on fire build
 
 Our own [Jon Meyers](https://twitter.com/_dijonmusters) and the broader community have been busy creating awesome tutorials and integration guides to help everyone build even more amazing things with Supabase:
 
-- Jon has added official guides for working with [Auth0](/docs/guides/integrations/auth0) and [Vercel](/docs/guides/integrations/vercel),
-- [Jonny Summers-Muir](https://twitter.com/JSummersMuir) has been busy paving the way for [Prisma](/docs/guides/integrations/prisma), and
-- [Aman Mittal](https://github.com/amandeepmittal) has hooked us up with a guide for [Draftbit](/docs/guides/integrations/draftbit)!
+- Jon has added official guides for working with [Auth0](/partners/integrations/auth0) and [Vercel](/partners/integrations/vercel),
+- [Jonny Summers-Muir](https://twitter.com/JSummersMuir) has been busy paving the way for [Prisma](/partners/integrations/prisma), and
+- [Aman Mittal](https://github.com/amandeepmittal) has hooked us up with a guide for [Draftbit](/partners/integrations/draftbit)!
 
 And below are some of the community one's we've come across recently. If you've created one yourself, please notify us by tagging us in a Tweet!
 
@@ -117,15 +119,15 @@ Anytime we scroll through [madewithsupabase.com](https://www.madewithsupabase.co
 
 So we reached out to some of our users, requesting a short video to learn more and we were overwhelmed with your gracious submissions. We've started a user stories playlist and we are so excited to see many more of these stories in the future. 💚
 
-<iframe
-  className="w-full"
-  width="700"
-  height="350"
-  src="https://www.youtube-nocookie.com/embed/videoseries?list=PL5S4mPUpp4OuzQN-a_FY3OZQuYo4NmXvb"
-  frameBorder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen
-></iframe>
+<div className="video-container">
+  <iframe
+    className="w-full"
+    src="https://www.youtube-nocookie.com/embed/videoseries?list=PL5S4mPUpp4OuzQN-a_FY3OZQuYo4NmXvb"
+    frameBorder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>
 
 And with that, we officially declare Launch Week as open 🥳 Check back [here](/blog) every day this week to see what new things we are shipping. We can't wait to share them with you 🚀
 

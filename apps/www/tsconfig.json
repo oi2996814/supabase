@@ -2,10 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"]
+      "contentlayer/generated": ["./.contentlayer/generated"],
+      "~/*": ["./*"],
+      "@ui/*": ["./../../packages/ui/src/*"]
     },
     "downlevelIteration": true,
-    "target": "es5",
+    "target": "ES2021",
     "module": "esnext",
     "jsx": "preserve",
     "strict": true,
@@ -18,8 +20,20 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "exclude": ["node_modules", "supabase"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".contentlayer/generated",
+    "./../../packages/ui/src/**/*.d.ts"
+  ]
 }

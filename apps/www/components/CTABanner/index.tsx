@@ -1,26 +1,55 @@
-import { Button } from 'ui'
+import Link from 'next/link'
+import { Button, cn } from 'ui'
+import { useSendTelemetryEvent } from '~/lib/telemetry'
 
-const CTABanner = (props: any) => {
-  const { darkerBg } = props
+interface Props {
+  className?: string
+  darkerBg?: boolean
+}
+
+const CTABanner = ({ darkerBg, className }: Props) => {
+  const sendTelemetryEvent = useSendTelemetryEvent()
   return (
     <div
-      className={`
-        bg-scale-200 grid grid-cols-12 items-center gap-4 border-t py-32 text-center
-        ${darkerBg ? 'dark:bg-dark-900' : ''} px-16
-      `}
+      className={cn(
+        `bg-background grid grid-cols-12 items-center gap-4 border-t py-32 text-center px-16`,
+        darkerBg && 'bg-alternative',
+        className
+      )}
     >
       <div className="col-span-12">
         <h2 className="h2">
-          <span className="text-scale-900">Build in a weekend,</span>
-          <span className="text-scale-1200 dark:text-white"> scale to millions</span>
+          <span className="text-foreground-lighter">Build in a weekend,</span>
+          <span className="text-foreground block sm:inline"> scale to millions</span>
         </h2>
       </div>
-      <div className="col-span-12 mt-4">
-        <a href="https://app.supabase.com/">
-          <Button size="medium" className="text-white">
+      <div className="flex items-center justify-center gap-2 col-span-12 mt-4">
+        <Button asChild size="medium">
+          <Link
+            href="https://supabase.com/dashboard"
+            onClick={() =>
+              sendTelemetryEvent({
+                action: 'start_project_button_clicked',
+                properties: { buttonLocation: 'CTA Banner' },
+              })
+            }
+          >
             Start your project
-          </Button>
-        </a>
+          </Link>
+        </Button>
+        <Button asChild size="medium" type="default">
+          <Link
+            href="/contact/sales"
+            onClick={() =>
+              sendTelemetryEvent({
+                action: 'request_demo_button_clicked',
+                properties: { buttonLocation: 'CTA Banner' },
+              })
+            }
+          >
+            Request a demo
+          </Link>
+        </Button>
       </div>
     </div>
   )

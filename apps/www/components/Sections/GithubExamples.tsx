@@ -1,24 +1,22 @@
 import { useRef } from 'react'
 
-import { useRouter } from 'next/router'
-
 import { Swiper, SwiperSlide } from 'swiper/react'
 // import Swiper core and required modules
-import SwiperCore, { Navigation, Pagination } from 'swiper'
+import SwiperCore from 'swiper'
+import { Navigation, Pagination } from 'swiper/modules'
 
+import { Github } from 'lucide-react'
 import Link from 'next/link'
-import { Button, IconGitHub, IconArrowLeft, IconArrowRight, IconBookOpen } from 'ui'
+import { Button } from 'ui'
 
-import Examples from '../../data/Examples.json'
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react'
+import Examples from '~/data/Examples'
 import ExampleCard from '../ExampleCard'
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination])
 
 function GithubExamples() {
-  // base path for images
-  const { basePath } = useRouter()
-
   const prevRef = useRef(null)
   const nextRef = useRef(null)
 
@@ -31,24 +29,17 @@ function GithubExamples() {
             Supported by a network of early advocates, contributors, and champions.
           </p>
           <div className="flex items-center justify-center gap-2 py-4">
-            <Link href="/docs/guides/examples#guides" as="/docs/guides/examples#guides">
-              <Button size="small" as="a" type="default" icon={<IconBookOpen size={12} />}>
-                View guides
-              </Button>
-            </Link>
-            <Link href="/docs/guides/examples" as="/docs/guides/examples">
-              <Button size="small" as="a" type="default">
-                View all examples
-              </Button>
-            </Link>
-            <Link
-              href="https://github.com/supabase/supabase/tree/master/examples"
-              as="https://github.com/supabase/supabase/tree/master/examples"
-            >
-              <Button size="small" as="a" type="default" icon={<IconGitHub size={12} />}>
+            <Button asChild size="small" type="default" icon={<BookOpen size={12} />}>
+              <Link href="/docs/guides/resources/examples">View guides</Link>
+            </Button>
+            <Button asChild size="small" type="default" icon={<Github size={12} />}>
+              <Link
+                href="https://github.com/supabase/supabase/tree/master/examples"
+                as="https://github.com/supabase/supabase/tree/master/examples"
+              >
                 Official GitHub library
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
@@ -57,6 +48,7 @@ function GithubExamples() {
         <div className={'lg:-mr-32 lg:-ml-32'}>
           <Swiper
             style={{ overflow: 'visible' }}
+            loop={true}
             initialSlide={3}
             spaceBetween={0}
             slidesPerView={4}
@@ -101,10 +93,10 @@ function GithubExamples() {
             })}
             <div className="container mx-auto mt-3 hidden flex-row justify-between md:flex">
               <div ref={prevRef} className="p ml-4 cursor-pointer">
-                <IconArrowLeft />
+                <ArrowLeft />
               </div>
               <div ref={nextRef} className="p mr-4 cursor-pointer">
-                <IconArrowRight />
+                <ArrowRight />
               </div>
             </div>
           </Swiper>
